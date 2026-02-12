@@ -1,7 +1,9 @@
 # Lab 3: Contextual Bandit-Based News Article Recommendation System
 
 **Student:** Harkirat Singh 
+
 **Roll Number:** U20230082
+
 **Course:** Reinforcement Learning Fundamentals  
 
 ---
