@@ -12,15 +12,15 @@
 
 ### Environment Structure
 - **Contexts:** 3 unique user types (user_1, user_2, user_3)
-- **Bandits/Arms:** 3 news categories per context (EDUCATION, ENVIRONMENT, POLITICS)
+- **Bandits/Arms:** 4 news categories per context (ENTERTAINMENT, EDUCATION, TECH, CRIME)
 - **Total Arms:** 12 (3 contexts × 4 categories)
 - **Horizon:** T = 10,000 steps per context (30,000 total)
 
 ### Arm Mapping
 ```
-Arms 0-2:     EDUCATION, ENVIRONMENT, POLITICS     → user_1
-Arms 3-5:     EDUCATION, ENVIRONMENT, POLITICS     → user_2
-Arms 6-8:     EDUCATION, ENVIRONMENT, POLITICS     → user_3
+Arms 0-3:     ENTERTAINMENT, EDUCATION, TECH, CRIME     → user_1
+Arms 4-7:     ENTERTAINMENT, EDUCATION, TECH, CRIME     → user_2
+Arms 8-11:    ENTERTAINMENT, EDUCATION, TECH, CRIME     → user_3
 ```
 
 ---
@@ -217,40 +217,40 @@ Epsilon-Greedy         ε=0.3               3.7675          3.7861           3.7
 
 **Epsilon-Greedy (ε=0.01):**
 ```
-Context 0 (user_1): [ 1.86, -5.68,  3.69, -7.39]  → Prefers Arm 2
-Context 1 (user_2): [ 1.91,  4.63, -1.70, -1.42]  → Prefers Arm 1
-Context 2 (user_3): [ 7.79, -0.93, -0.33, -0.58]  → Prefers Arm 0
+Context 0 (user_1): [ 1.86, -5.68,  3.69, -7.39]  → Prefers Arm 2 (TECH)
+Context 1 (user_2): [ 1.91,  4.63, -1.70, -1.42]  → Prefers Arm 1 (EDUCATION)
+Context 2 (user_3): [ 7.79, -0.93, -0.33, -0.58]  → Prefers Arm 0 (ENTERTAINMENT)
 ```
 
 **UCB (C=2.0 - Best Overall):**
 ```
-Context 0 (user_1): [ 1.73, -6.40,  3.70, -7.51]  → Prefers Arm 2
-Context 1 (user_2): [ 1.56,  4.63, -1.43, -2.78]  → Prefers Arm 1
-Context 2 (user_3): [ 7.78, -2.50, -1.00,  0.84]  → Prefers Arm 0
+Context 0 (user_1): [ 1.73, -6.40,  3.70, -7.51]  → Prefers Arm 2 (TECH)
+Context 1 (user_2): [ 1.56,  4.63, -1.43, -2.78]  → Prefers Arm 1 (EDUCATION)
+Context 2 (user_3): [ 7.78, -2.50, -1.00,  0.84]  → Prefers Arm 0 (ENTERTAINMENT)
 ```
 
 **SoftMax (τ=1.0):**
 ```
-Context 0 (user_1): [ 1.98, -5.73,  3.66, -8.41]  → Prefers Arm 2
-Context 1 (user_2): [ 1.87,  4.64, -2.35, -3.15]  → Prefers Arm 1
-Context 2 (user_3): [ 7.77, -2.56, -0.08, -0.34]  → Prefers Arm 0
+Context 0 (user_1): [ 1.98, -5.73,  3.66, -8.41]  → Prefers Arm 2 (TECH)
+Context 1 (user_2): [ 1.87,  4.64, -2.35, -3.15]  → Prefers Arm 1 (EDUCATION)
+Context 2 (user_3): [ 7.77, -2.56, -0.08, -0.34]  → Prefers Arm 0 (ENTERTAINMENT)
 ```
 
 **Key Insight:** All algorithms converged to the same arm preferences per context, validating the learned policies.
 
 ### 5.4 Test Set Recommendations
 **Generated 2,000 recommendations for test users:**
-- All 2,000 test users classified as **user_2** by Random Forest
-- All recommendations: **EDUCATION** category (highest Q-value for user_2 context)
-- Expected reward per recommendation: **4.63** (based on learned Q-value)
+- Test users classified: **user_2** (1,365 users), **user_1** (390 users), **user_3** (245 users)
+- Recommendations: **EDUCATION** for user_2, **TECH** for user_1, **ENTERTAINMENT** for user_3
+- Expected rewards: user_2 → **4.63**, user_1 → **3.70**, user_3 → **7.78**
 
 **Sample Recommendations:**
 ```
-User ID    Context    Category     Expected Reward    Article Headline
-──────────────────────────────────────────────────────────────────────────────
-U4058      user_2    EDUCATION         4.63          A Hack for Improving High School...
-U1118      user_2    EDUCATION         4.63          Why West Virginia Teachers...
-U6555      user_2    EDUCATION         4.63          Grade-Span Tests Are Not the Answer
+User ID    Context    Category        Expected Reward    Article Headline
+─────────────────────────────────────────────────────────────────────────────────────
+U4058      user_2    EDUCATION           4.63          Do Grades Really Reflect Rigor?
+U1118      user_3    ENTERTAINMENT       7.78          13 Times Taylor Swift Showed Her Way...
+U6555      user_1    TECH                3.70          Tim Cook Says EU Ruling On Apple's Irish Tax...
 ```
 
 ### 5.5 Analysis Plots
@@ -279,9 +279,9 @@ U6555      user_2    EDUCATION         4.63          Grade-Span Tests Are Not th
 
 ### 3. Context-Dependent Learning
 - All algorithms learned distinct arm preferences per user context
-- **user_1** context: Prefers Arm 2 (Q-value ~3.7)
-- **user_2** context: Prefers Arm 1 (Q-value ~4.6)
-- **user_3** context: Prefers Arm 0 (Q-value ~7.8)
+- **user_1** context: Prefers Arm 2 / TECH (Q-value ~3.7)
+- **user_2** context: Prefers Arm 1 / EDUCATION (Q-value ~4.6)
+- **user_3** context: Prefers Arm 0 / ENTERTAINMENT (Q-value ~7.8)
 - Consistency across algorithms validates the learned policies
 
 ### 4. Classification Quality Impact
